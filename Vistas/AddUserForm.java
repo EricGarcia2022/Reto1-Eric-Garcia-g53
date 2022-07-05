@@ -1,12 +1,25 @@
 
 package Vistas;
 
+import Modelo.Conexion;
+import java.awt.Frame;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.JOptionPane;
 
 public class AddUserForm extends javax.swing.JDialog {
-
+       //1.Instancia de la clase conexion
+    Conexion conexion = new Conexion();
+    Connection connection;
+    //2. L a libreria Statement permite ejecutar los query SQL
+    Statement st;
+    ResultSet rs;
+    
     public AddUserForm(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+        this.setLocationRelativeTo(parent);
         initComponents();
          setLocationRelativeTo(null);
            }
@@ -21,7 +34,7 @@ public class AddUserForm extends javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        txtApellido = new javax.swing.JTextField();
+        txtApellidos = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         cbTipoDocumento = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
@@ -45,9 +58,9 @@ public class AddUserForm extends javax.swing.JDialog {
 
         jLabel4.setText("Apellidos");
 
-        txtApellido.addActionListener(new java.awt.event.ActionListener() {
+        txtApellidos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtApellidoActionPerformed(evt);
+                txtApellidosActionPerformed(evt);
             }
         });
 
@@ -90,6 +103,11 @@ public class AddUserForm extends javax.swing.JDialog {
         btnCancelar.setBackground(new java.awt.Color(255, 255, 255));
         btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/cancelIcon.png"))); // NOI18N
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -110,7 +128,7 @@ public class AddUserForm extends javax.swing.JDialog {
                         .addGap(114, 114, 114)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(cbTipoDocumento, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtApellido)
+                            .addComponent(txtApellidos)
                             .addComponent(txtNombre)
                             .addComponent(txtDocumento)
                             .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -146,7 +164,7 @@ public class AddUserForm extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
-                            .addComponent(txtApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
@@ -183,9 +201,9 @@ public class AddUserForm extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtApellidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtApellidoActionPerformed
+    private void txtApellidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtApellidosActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtApellidoActionPerformed
+    }//GEN-LAST:event_txtApellidosActionPerformed
 
     private void cbTipoDocumentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbTipoDocumentoActionPerformed
         // TODO add your handling code here:
@@ -200,23 +218,39 @@ public class AddUserForm extends javax.swing.JDialog {
     }//GEN-LAST:event_txtEmailActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // 1. Creamos una variable con todo los nombre de los campos
+      // 1. Creamos una variable con todo los nombre de los campos
         String nombre = txtNombre.getText();
-        String apellidos = txtApellido.getText();
+        String apellidos = txtApellidos.getText();
         //2. Voy a ingresar un array que lleve |C.C |C.E |Libreta Militar | Pasaporte | Otro|
         String tipoDocumento = (String)cbTipoDocumento.getSelectedItem();
         String documento = txtDocumento.getText();
         String email = txtEmail.getText();
         //3. Validamos que se este capturando correctamente los valores
-        System.out.println("Nombre: " + nombre + " " + apellidos + "\nDocumento: " +  tipoDocumento + "\nNumero: " + documento + "\nCorreo: " +  email);
+        System.out.println("Nombre: " + nombre + " " + apellidos 
+                + "\nDocumento: " +  tipoDocumento + "\nNumero: " + documento
+                + "\nCorreo: " +  email);
         
         //Validar que ninguno de los campos este vacio
         if (nombre.isEmpty() || (apellidos.isEmpty() || (documento.isEmpty() || (email.isEmpty())))) {
             JOptionPane.showMessageDialog(this, "Faltan campos por diligenciar", "Nuevo empleado", JOptionPane.WARNING_MESSAGE);
          }else{
-            JOptionPane.showMessageDialog(this, "Rgistro exitoso", "Nuevo empleado", JOptionPane.INFORMATION_MESSAGE);
+            String querycrearEmpleado = "INSERT INTO `empleados`(`nombreEmp`, `apellidos`, `tipoDocumento`, `documento`, `correo`) VALUES ('" + nombre + "','" + apellidos + "','" + tipoDocumento + "','" + documento + "','" + email + "')";
+            JOptionPane.showMessageDialog(this, "Registro exitoso", "Nuevo empleado", JOptionPane.INFORMATION_MESSAGE);
+            
+            try{
+               connection = conexion.getConnection();
+               st = connection.createStatement();
+               st.executeUpdate(querycrearEmpleado);
+               JOptionPane.showMessageDialog(this, "Registro exitoso", "Nuevo empleado", JOptionPane.INFORMATION_MESSAGE);
+            }catch(SQLException e){
+               JOptionPane.showMessageDialog(this,"No se pudo crear el empleado","Nuevo empleado",JOptionPane.ERROR_MESSAGE);
+            }
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+         
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -273,9 +307,13 @@ public class AddUserForm extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField txtApellido;
+    private javax.swing.JTextField txtApellidos;
     private javax.swing.JTextField txtDocumento;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
+
+    private void setlocationRelativeTo(Frame parent) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

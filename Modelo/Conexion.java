@@ -9,7 +9,7 @@ public class Conexion {
     Connection connection;
     // Atributos
     String driver = "com.mysql.cj.jdbc.Driver";
-    String cadenaConexion = "jdbc:mysql://localhost:3303/reto1_g53_db";
+    String cadenaConexion = "jdbc:mysql://localhost:3306/reto1_g53";
     String usuario = "root";
     String contraseña = "";
     
@@ -21,9 +21,9 @@ public class Conexion {
        try{
            Class.forName(driver);
            connection = DriverManager.getConnection(cadenaConexion,usuario,contraseña);
-           //Verificamos si la coexion devuelve algo
+           //4.Verificamos si la conexion devuelve algo
            if (connection != null){
-               System.out.println("Conexion exitosa con la base de datso");
+               System.out.println("Conexion exitosa con la base de datos");
             }
        }catch(ClassNotFoundException | SQLException e){
            System.out.println("No se pudo establecer conexion con la base de datos");
