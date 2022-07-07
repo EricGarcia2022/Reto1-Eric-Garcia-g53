@@ -245,6 +245,7 @@ public class AddUserForm extends javax.swing.JDialog {
             }catch(SQLException e){
                JOptionPane.showMessageDialog(this,"No se pudo crear el empleado","Nuevo empleado",JOptionPane.ERROR_MESSAGE);
             }
+             this.dispose();
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 

@@ -51,6 +51,7 @@ public class UserMenu extends javax.swing.JFrame {
                     + empleados[4]);
             //9.Creamos una fila   dentro de la tabla para cada elemento que devuelve
             //el query
+            contenidoTablaEmpleados.addRow(empleados);
             tblEmpleados.setModel(contenidoTablaEmpleados);
          }
         
@@ -237,6 +238,7 @@ public class UserMenu extends javax.swing.JFrame {
         addUserF.setVisible(true);
         borrarDatosTabla();
         listarEmpleados();
+      
         
     }//GEN-LAST:event_btnAddUserActionPerformed
 
